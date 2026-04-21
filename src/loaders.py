@@ -31,24 +31,36 @@ from src.ma_types import MA, EffectScale, OutcomeType, ReproStatus, Study
 
 logger = logging.getLogger(__name__)
 
-_DEFAULT_PAIRWISE70 = Path(r"C:\Projects\Pairwise70\data")
-_DEFAULT_METAAUDIT = Path(r"C:\MetaAudit\metaaudit")
-_DEFAULT_REPRO_FLOOR = Path(r"C:\Projects\repro-floor-atlas")
+try:
+    from src.paths_local import (
+        DEFAULT_METAAUDIT as _DEFAULT_METAAUDIT,
+        DEFAULT_PAIRWISE70 as _DEFAULT_PAIRWISE70,
+        DEFAULT_REPRO_FLOOR as _DEFAULT_REPRO_FLOOR,
+    )
+except ImportError:
+    _DEFAULT_PAIRWISE70 = _DEFAULT_METAAUDIT = _DEFAULT_REPRO_FLOOR = None  # type: ignore[assignment]
 
 
 class LoaderError(Exception):
     """Raised on data integrity errors that must halt the pipeline."""
 
 
+def _resolve_path(env_var: str, fallback: Path | None) -> Path | None:
+    """Env var wins; paths_local fallback only used if env not set."""
+    val = os.environ.get(env_var)
+    if val:
+        return Path(val)
+    return fallback
+
+
 def _auto_setup_metaaudit() -> None:
     """Insert METAAUDIT_DIR's parent on sys.path at import time if locatable.
 
-    Silent no-op if the dir isn't there — call sites (iter_mas_with_log,
-    _studies_from_inputs) raise LoaderError/ModuleNotFoundError with a
+    Silent no-op if not locatable — call sites raise LoaderError with a
     helpful message if metaaudit is actually needed and missing.
     """
-    candidate = Path(os.environ.get("METAAUDIT_DIR", _DEFAULT_METAAUDIT))
-    if candidate.is_dir():
+    candidate = _resolve_path("METAAUDIT_DIR", _DEFAULT_METAAUDIT)
+    if candidate is not None and candidate.is_dir():
         parent = str(candidate.parent)
         if parent not in sys.path:
             sys.path.insert(0, parent)
@@ -151,12 +163,20 @@ def iter_mas_with_log(
 
     Returns: LoadResult with `mas` (usable) and `skip_log` (ma_id → reason_code).
     """
-    pairwise70_dir = pairwise70_dir or Path(os.environ.get("PAIRWISE70_DIR", _DEFAULT_PAIRWISE70))
-    metaaudit_dir = metaaudit_dir or Path(os.environ.get("METAAUDIT_DIR", _DEFAULT_METAAUDIT))
-    atlas_csv = atlas_csv or (
-        Path(os.environ.get("REPRO_FLOOR_ATLAS_DIR", _DEFAULT_REPRO_FLOOR))
-        / "outputs" / "atlas.csv"
-    )
+    pairwise70_dir = pairwise70_dir or _resolve_path("PAIRWISE70_DIR", _DEFAULT_PAIRWISE70)
+    metaaudit_dir = metaaudit_dir or _resolve_path("METAAUDIT_DIR", _DEFAULT_METAAUDIT)
+    repro_floor_dir = _resolve_path("REPRO_FLOOR_ATLAS_DIR", _DEFAULT_REPRO_FLOOR)
+    atlas_csv = atlas_csv or (repro_floor_dir / "outputs" / "atlas.csv" if repro_floor_dir else None)
+
+    if pairwise70_dir is None:
+        raise LoaderError(
+            "PAIRWISE70_DIR not set and no paths_local.py fallback found. "
+            "Set env var or copy src/paths_local.example.py to src/paths_local.py."
+        )
+    if metaaudit_dir is None:
+        raise LoaderError(
+            "METAAUDIT_DIR not set and no paths_local.py fallback found."
+        )
 
     _ensure_metaaudit_on_path(metaaudit_dir)
     from metaaudit.loader import load_all_reviews  # noqa: E402

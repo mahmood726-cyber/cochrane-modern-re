@@ -20,3 +20,12 @@ docs/index.html
 docs/non_reproducible_index.html
 docs/smoke_index.html
 renv/
+src/paths_local.py
+.env.local
+# === Sentinel hook output (auto-added by install) ===
+STUCK_FAILURES.md
+STUCK_FAILURES.jsonl
+sentinel-findings.md
+sentinel-findings.jsonl
+review-findings.md
+review-findings.jsonl
