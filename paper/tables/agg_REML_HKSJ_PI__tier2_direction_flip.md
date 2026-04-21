@@ -1,0 +1,26 @@
+| reproducibility_status   | outcome_type   | k_stratum   |   n_total |   n_comparable |   n_flips |   flip_rate_comparable |   flip_rate_total | sparse_stratum   |
+|:-------------------------|:---------------|:------------|----------:|---------------:|----------:|-----------------------:|------------------:|:-----------------|
+| non_reproducible         | GIV            | 10<=k<20    |         7 |              7 |         0 |                  0.000 |             0.000 | True             |
+| non_reproducible         | GIV            | 5<=k<10     |         7 |              7 |         0 |                  0.000 |             0.000 | True             |
+| non_reproducible         | GIV            | k<5         |         3 |              3 |         0 |                  0.000 |             0.000 | True             |
+| non_reproducible         | GIV            | k>=20       |        14 |             14 |         0 |                  0.000 |             0.000 | True             |
+| non_reproducible         | binary         | 10<=k<20    |        46 |             43 |         0 |                  0.000 |             0.000 | False            |
+| non_reproducible         | binary         | 5<=k<10     |        62 |             61 |         0 |                  0.000 |             0.000 | False            |
+| non_reproducible         | binary         | k<5         |        86 |             86 |         1 |                  0.012 |             0.012 | False            |
+| non_reproducible         | binary         | k>=20       |        58 |             57 |         0 |                  0.000 |             0.000 | False            |
+| non_reproducible         | continuous     | 10<=k<20    |        72 |             72 |         4 |                  0.056 |             0.056 | False            |
+| non_reproducible         | continuous     | 5<=k<10     |       110 |            110 |         1 |                  0.009 |             0.009 | False            |
+| non_reproducible         | continuous     | k<5         |       163 |            163 |         1 |                  0.006 |             0.006 | False            |
+| non_reproducible         | continuous     | k>=20       |        52 |             52 |         2 |                  0.038 |             0.038 | False            |
+| reproducible             | GIV            | 10<=k<20    |        16 |             16 |         0 |                  0.000 |             0.000 | True             |
+| reproducible             | GIV            | 5<=k<10     |        20 |             20 |         0 |                  0.000 |             0.000 | False            |
+| reproducible             | GIV            | k<5         |        27 |             27 |         0 |                  0.000 |             0.000 | False            |
+| reproducible             | GIV            | k>=20       |         7 |              7 |         0 |                  0.000 |             0.000 | True             |
+| reproducible             | binary         | 10<=k<20    |      1144 |           1111 |         7 |                  0.006 |             0.006 | False            |
+| reproducible             | binary         | 5<=k<10     |      1380 |           1365 |         9 |                  0.007 |             0.007 | False            |
+| reproducible             | binary         | k<5         |      1833 |           1833 |         5 |                  0.003 |             0.003 | False            |
+| reproducible             | binary         | k>=20       |      1060 |           1032 |         2 |                  0.002 |             0.002 | False            |
+| reproducible             | continuous     | 10<=k<20    |        38 |             38 |         1 |                  0.026 |             0.026 | False            |
+| reproducible             | continuous     | 5<=k<10     |        63 |             63 |         1 |                  0.016 |             0.016 | False            |
+| reproducible             | continuous     | k<5         |       103 |            103 |         2 |                  0.019 |             0.019 | False            |
+| reproducible             | continuous     | k>=20       |        15 |             15 |         0 |                  0.000 |             0.000 | True             |

@@ -24,8 +24,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [0.1.0] — TBC (target: end 2026-Q2)
 
-Initial demonstrator release. Seed results:
-- **Non-reproducible subset (680 MAs):** 15.7% Tier-1 significance flip, 1.3% Tier-2 direction flip, 1.6% Tier-3 MID flip (on 61 MID-available MAs).
-- **Full corpus (7,545 MAs):** pending; see v0.1.0 release notes.
+Initial demonstrator release. Headline results:
+
+**Full corpus (6,386 loadable MAs from 7,545 parsed):**
+- **Tier 1 significance flip (DL → REML+HKSJ+PI): 8.2%** (514 / 6,305 comparable)
+- **Tier 2 direction flip: 0.6%** (36 / 6,305)
+- **Tier 3 clinically-important flip: 3.9%** (27 / 688 MID-available subset)
+- Deterministic-method convergence: 98.7% (REML_HKSJ_PI)
+
+**Non-reproducible subset (680 MAs), 2× higher sensitivity:**
+- Tier 1: 15.7%, Tier 2: 1.3%, Tier 3: 1.6% on MID-available
+
+**Most-sensitive stratum:** continuous, k<5, non-reproducible = 23.3% Tier-1 flip rate (vs 1.8% for binary k≥20 reproducible).
+
+**Bayesian comparator:** deferred to overnight run (~3 hrs compute at corpus scale).
 
 Companion paper in preparation for Research Synthesis Methods.

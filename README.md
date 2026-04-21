@@ -6,15 +6,21 @@ Reference implementation + demonstrator paper: four random-effects methods — *
 
 **v0.1.0-dev** on branch `feat/v0.1-implementation`. Not yet released. Analytical pipeline complete; full-corpus run in progress.
 
-### Seed results (non-reproducible subset, 680 MAs)
+### Full-corpus results (DL → REML+HKSJ+PI, 6,386 MAs from 582 Cochrane reviews)
 
-Switching from DL to REML+HKSJ+PI changes:
+| Tier | Rate | n |
+|---|---|---|
+| 1 — Significance flip | **8.2%** | 514 / 6,305 comparable |
+| 2 — Direction flip | 0.6% | 36 / 6,305 |
+| 3 — Clinically-important flip (MID-available subset) | 3.9% | 27 / 688 |
+
+### Non-reproducible subset (680 MAs) — 2× more method-sensitive
 
 | Tier | Rate | n |
 |---|---|---|
 | 1 — Significance flip | **15.7%** | 106 / 675 comparable |
 | 2 — Direction flip | 1.3% | 9 / 675 |
-| 3 — Clinically-important flip (MID-available subset) | 1.6% | 1 / 61 |
+| 3 — Clinically-important flip | 1.6% | 1 / 61 |
 
 Clean stratum gradient (supports DL small-k bias theory):
 
