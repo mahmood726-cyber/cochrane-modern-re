@@ -1,5 +1,9 @@
 # E156 Protocol — cochrane-modern-re
 
+<!-- sentinel:skip-file  (E156 convention: the PATH: metadata line below is
+     intentional provenance, not deployed code. Mirrors the marker at the
+     head of C:\E156\rewrite-workbook.txt.) -->
+
 **Project:** cochrane-modern-re
 **Title:** Modern Random-Effects Methods Change the Significance Judgement of Cochrane Pairwise Meta-Analyses in 8.2% of Cases
 **Type:** methods
