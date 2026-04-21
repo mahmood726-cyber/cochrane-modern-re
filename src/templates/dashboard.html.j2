@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cochrane Modern RE — Flip Atlas v{{ version }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Cochrane Modern RE — Flip Atlas">
+<meta property="og:description" content="Modern random-effects methods vs RevMan defaults across {{ n_mas }} Cochrane pairwise meta-analyses.">
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+         max-width: 1100px; margin: 2em auto; padding: 0 1em; color: #222;
+         line-height: 1.5; }
+  h1 { border-bottom: 2px solid #333; padding-bottom: .3em; }
+  h2 { margin-top: 1.8em; border-bottom: 1px solid #ddd; padding-bottom: .2em; }
+  table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.92em; }
+  th, td { border: 1px solid #ccc; padding: 4px 8px; text-align: right; }
+  th { background: #eee; }
+  td:first-child, td:nth-child(2), td:nth-child(3),
+  th:first-child, th:nth-child(2), th:nth-child(3) { text-align: left; }
+  .summary { background: #f6f6f6; padding: 1em 1.2em; border-left: 4px solid #0066cc;
+             margin: 1em 0; }
+  .summary p { margin: .4em 0; }
+  .headline { font-size: 1.4em; font-weight: bold; color: #0066cc; }
+  .sparse td { color: #888; font-style: italic; }
+  footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid #ddd;
+           color: #666; font-size: 0.9em; }
+  code { background: #f6f6f6; padding: 1px 4px; border-radius: 3px;
+         font-family: Consolas, Monaco, monospace; }
+</style>
+</head>
+<body>
+<h1>Cochrane Modern RE — Flip Atlas <small>v{{ version }}</small></h1>
+
+<div class="summary">
+  <p><strong>Corpus:</strong> {{ n_mas }} pairwise meta-analyses across {{ n_reviews }} Cochrane systematic reviews (Pairwise70).</p>
+  <p><strong>Methods compared:</strong> DL (baseline), REML_only, REML+HKSJ+PI, <code>bayesmeta</code> half-normal.</p>
+  <p><strong>Headline significance-flip rate (DL → REML+HKSJ+PI):</strong>
+     <span class="headline">{{ "%.1f"|format(headline_rate * 100) }}%</span>
+     <small>({{ comparator_description }})</small>
+  </p>
+</div>
+
+<h2>Tier 1 — Significance flips by stratum</h2>
+<p><em>CI excludes null under baseline but includes null under comparator (or vice versa).</em></p>
+{{ tier1_table|safe }}
+
+<h2>Tier 2 — Direction flips by stratum</h2>
+<p><em>Sign of pooled point estimate changes (protective → harmful or vice versa).</em></p>
+{{ tier2_table|safe }}
+
+<h2>Tier 3 — Clinically-important flips (MID-available subset)</h2>
+<p><em>|Δ pooled effect| exceeds the MID for that outcome. Reported only on the MID-available subset; NA for outcomes not in the MID lookup table.</em></p>
+{{ tier3_table|safe }}
+
+<footer>
+  <p>Generated {{ generated_at }} UTC. Source: <a href="https://github.com/mahmood726-cyber/cochrane-modern-re">cochrane-modern-re</a>. Target journal: Research Synthesis Methods.</p>
+  <p>Related: <a href="https://github.com/mahmood726-cyber/repro-floor-atlas">repro-floor-atlas</a> (reproduction-floor primitive).</p>
+</footer>
+</body>
+</html>
