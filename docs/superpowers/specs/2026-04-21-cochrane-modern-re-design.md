@@ -145,8 +145,8 @@ cochrane-modern-re/
 - Output: `{tier1_sig_flip, tier2_direction_flip, tier3_mid_flip}` where each is `bool | NA`.
 - **Tier 1** — `sign(ci_lo × ci_hi)` change. Positive product → does not cross null; negative product → crosses null. Flip = change in that status.
 - **Tier 2** — `sign(estimate)` change.
-- **Tier 3** — `|estimate_baseline - estimate_comparator| > mid_lookup[outcome_code]`. `NA` if outcome not in MID table.
-- MID table: YAML, ~15 well-established outcomes at v0.1 (all-cause mortality, MACE, HF hospitalisation, common QoL MCIDs, SMD=0.2 per Cohen fallback for SMD-only outcomes with no published MID). Extensible.
+- **Tier 3** — scale-aware: for ratio outcomes (`logRR`/`logOR`/`logHR`) both estimates are back-transformed to natural scale before comparison (`|exp(est_base) - exp(est_comp)| > mid`). For continuous outcomes (`SMD`/`MD`/`GIV`) the comparison is direct (`|est_base - est_comp| > mid`). `NA` if outcome not in MID table.
+- MID table: YAML keyed by `outcome_code`, with each entry specifying `{mid: <value>, scale: <"natural"|"sd_units">, source: <citation>}`. ~15 well-established outcomes at v0.1: all-cause mortality (natural-scale RR Δ = 0.05), MACE (RR Δ = 0.05), HF hospitalisation (RR Δ = 0.05), common QoL MCIDs per instrument, SMD = 0.2 (Cohen "small") as fallback for SMD outcomes with no published MID. Extensible. MID values for v0.1 are sourced and reviewed at plan stage (see §9).
 
 ### 4.4 `aggregator.py`
 
