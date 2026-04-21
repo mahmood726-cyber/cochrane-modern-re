@@ -23,6 +23,13 @@ BATCH_TIMEOUT_SEC = 600  # 10 min per batch hard cap
 
 DeterministicMethod = Literal["DL", "REML_only", "REML_HKSJ_PI"]
 
+# Tau prior half-normal scale — 0.5 for log-scale outcomes, 1.0 for SMD/MD/GIV.
+# Per spec §2.2. Override via run_bayesmeta(tau_prior_scale=...).
+_DEFAULT_TAU_SCALE = {
+    "logRR": 0.5, "logOR": 0.5, "logHR": 0.5,
+    "SMD": 1.0, "MD": 1.0, "GIV": 1.0,
+}
+
 
 def _find_rscript() -> str:
     rscript = shutil.which("Rscript")
@@ -105,5 +112,51 @@ def _to_metafor_result(raw: dict, method: DeterministicMethod) -> MethodResult:
         converged=bool(raw["converged"]),
         rhat=None,
         ess=None,
+        reason_code=raw.get("reason_code", ""),
+    )
+
+
+def run_bayesmeta(
+    *,
+    effect_scale: str,
+    mas: Sequence[MA],
+    tau_prior_scale: float | None = None,
+) -> list[MethodResult]:
+    """Bayesian RE with half-normal prior on tau.
+
+    tau_prior_scale defaults to 0.5 for log-scale outcomes (logRR/logOR/logHR)
+    and 1.0 for SMD/MD/GIV. Override by passing an explicit value.
+
+    bayesmeta is grid-deterministic so there's no MCMC retry loop — if the
+    subprocess fails, we mark the MA as unconverged with reason_code.
+    """
+    if not mas:
+        return []
+    scale = tau_prior_scale if tau_prior_scale is not None else _DEFAULT_TAU_SCALE.get(effect_scale, 0.5)
+    payload = {
+        "effect_scale": effect_scale,
+        "tau_prior_scale": float(scale),
+        "batch": _batch_payload(mas),
+    }
+    raw = _call_r(R_SCRIPTS / "run_bayesmeta.R", payload)
+    return [_to_bayes_result(r) for r in raw]
+
+
+def _to_bayes_result(raw: dict) -> MethodResult:
+    return MethodResult(
+        ma_id=raw["ma_id"],
+        method="bayesmeta_HN",
+        estimate=raw.get("estimate"),
+        se=raw.get("se"),
+        ci_lo=raw.get("ci_lo"),
+        ci_hi=raw.get("ci_hi"),
+        tau2=raw.get("tau2"),
+        i2=raw.get("i2"),
+        pi_lo=raw.get("pi_lo"),
+        pi_hi=raw.get("pi_hi"),
+        k_effective=int(raw["k_effective"]),
+        converged=bool(raw["converged"]),
+        rhat=raw.get("rhat"),
+        ess=raw.get("ess"),
         reason_code=raw.get("reason_code", ""),
     )
