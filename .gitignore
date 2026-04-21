@@ -10,8 +10,6 @@ outputs/
 .Rproj.user/
 .Rhistory
 .RData
-renv/library/
-renv/staging/
 PROGRESS.md
 sentinel-findings.md
 sentinel-findings.jsonl
@@ -21,3 +19,4 @@ data/pairwise70_cache/
 docs/index.html
 docs/non_reproducible_index.html
 docs/smoke_index.html
+renv/
