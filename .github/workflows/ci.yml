@@ -1,0 +1,65 @@
+name: ci
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  fast:
+    name: Fast tier (preflight + unit + contract)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.5.2'
+
+      - uses: r-lib/actions/setup-renv@v2
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python package
+        run: pip install -e ".[dev]"
+
+      - name: Fast tier — preflight + contracts + loader unit + flip + aggregator + dashboard
+        run: |
+          python -m pytest -v \
+            tests/test_preflight.py \
+            tests/test_contracts.py \
+            tests/test_flip_classifier.py \
+            tests/test_aggregator.py \
+            tests/test_dashboard.py \
+            -k "not integration and not bayesmeta"
+
+  slow:
+    name: Slow tier (Bayesian + integration)
+    needs: fast
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.5.2'
+
+      - uses: r-lib/actions/setup-renv@v2
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python package
+        run: pip install -e ".[dev]"
+
+      - name: Slow tier — Bayesian MC + method correctness + loader integration
+        run: python -m pytest -v tests/test_methods.py tests/test_bayesmeta_mc.py tests/test_loaders.py
+
+      # Note: tests/test_integration.py skipped in CI — requires Pairwise70
+      # corpus + MetaAudit which aren't public. Kept as a local/dev gate only.
