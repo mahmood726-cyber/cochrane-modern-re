@@ -28,6 +28,7 @@ import numpy as np
 import pandas as pd
 
 from src.ma_types import MA, EffectScale, OutcomeType, ReproStatus, Study
+from src.outcome_mapper import map_outcome
 
 logger = logging.getLogger(__name__)
 
@@ -263,11 +264,16 @@ def iter_mas_with_log(
                 skip_log[ma_id] = "insufficient_data"
                 continue
 
+            # Heuristic outcome-code mapping from Analysis.name free text.
+            analysis_name = None
+            if "Analysis.name" in df.columns and len(df) > 0:
+                analysis_name = str(df["Analysis.name"].iloc[0])  # type: ignore[index]
+
             mas.append(MA(
                 ma_id=ma_id,
                 review_id=str(ag.review_id),
                 outcome_type=_outcome_type_for(data_type),
-                outcome_code="unknown_outcome",  # v0.1: MID mapping is follow-on work
+                outcome_code=map_outcome(analysis_name),
                 effect_scale=_effect_scale_for(data_type),
                 studies=tuple(studies),
                 k=len(studies),

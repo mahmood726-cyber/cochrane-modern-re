@@ -93,9 +93,11 @@ def test_end_to_end_smoke_first_six_reviews(
 
     assert not tier1.empty
     assert not tier2.empty
-    # tier3 will have all-NA flips because outcome_code='unknown_outcome'
-    # corpus-wide in v0.1 (documented follow-on work)
-    assert int(tier3["n_flips"].sum()) == 0, "tier3 must be all-NA until MID mapping is built"
+    # Tier 3 is computable but coverage is narrow (MID table covers ~15
+    # cardiology-focused outcomes). Most smoke MAs map to 'unknown_outcome'
+    # and produce NA for Tier 3 — leaving n_flips at 0 in those strata.
+    # We don't assert a specific tier3 count, since the value depends on
+    # which outcomes are present in the first 6 reviews.
 
     # 5. Dashboard renders
     out = tmp_path / "index.html"
