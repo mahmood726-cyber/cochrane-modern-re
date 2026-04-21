@@ -2,7 +2,7 @@
 name = "cochrane-modern-re"
 version = "0.1.0-dev"
 description = "Modern RE methods vs RevMan defaults across 7,545 Cochrane pairwise MAs"
-requires-python = ">=3.11,<3.13"
+requires-python = ">=3.11"
 dependencies = [
     "pyarrow>=14",
     "pandas>=2.1",
