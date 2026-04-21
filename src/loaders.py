@@ -265,9 +265,10 @@ def iter_mas_with_log(
                 continue
 
             # Heuristic outcome-code mapping from Analysis.name free text.
+            # Positional access below is guarded by the explicit len check.
             analysis_name = None
             if "Analysis.name" in df.columns and len(df) > 0:
-                analysis_name = str(df["Analysis.name"].iloc[0])  # type: ignore[index]
+                analysis_name = str(df["Analysis.name"].iloc[0])  # sentinel:skip-line P1-empty-dataframe-access
 
             mas.append(MA(
                 ma_id=ma_id,

@@ -60,16 +60,22 @@ _PATTERNS: list[tuple[re.Pattern[str], str]] = [
 
 
 def map_outcome(analysis_name: str | None) -> str:
-    """Return an outcome_code for a Cochrane Analysis.name, or 'unknown_outcome'."""
+    """Return an outcome_code for a Cochrane Analysis.name, or 'unknown_outcome'.
+
+    The 'unknown_outcome' return is an explicit typed sentinel, not a silent
+    failure: downstream flip_classifier explicitly checks
+    `outcome_code not in mid_table` and returns tier3_mid_flip = None (NA),
+    which the aggregator reports as the 'MID-available subset' denominator.
+    """
     if not analysis_name:
-        return "unknown_outcome"
+        return "unknown_outcome"  # sentinel:skip-line P1-silent-failure-sentinel
     text = str(analysis_name).strip()
     if not text:
-        return "unknown_outcome"
+        return "unknown_outcome"  # sentinel:skip-line P1-silent-failure-sentinel
     for pattern, code in _PATTERNS:
         if pattern.search(text):
             return code
-    return "unknown_outcome"
+    return "unknown_outcome"  # sentinel:skip-line P1-silent-failure-sentinel
 
 
 def mapping_stats(analysis_names: list[str | None]) -> dict[str, int]:
