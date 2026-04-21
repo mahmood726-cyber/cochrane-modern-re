@@ -1,7 +1,9 @@
 """Shared pytest fixtures.
 
-Path fixtures respect the env-var-driven layout established in Task 0.3.
-See data/README.md for full provenance.
+Path fixtures resolve via env var, then src/paths_local.py, then None.
+Tests that require external data skip if the fixture resolves to None or
+a missing directory — keeps CI green where the Pairwise70 corpus is not
+available.
 """
 from __future__ import annotations
 
@@ -10,9 +12,21 @@ from pathlib import Path
 
 import pytest
 
-_DEFAULT_PAIRWISE70 = Path(r"C:\Projects\Pairwise70\data")
-_DEFAULT_METAAUDIT = Path(r"C:\MetaAudit\metaaudit")
-_DEFAULT_REPRO_FLOOR = Path(r"C:\Projects\repro-floor-atlas")
+try:
+    from src.paths_local import (  # type: ignore[import-not-found]
+        DEFAULT_METAAUDIT as _DEFAULT_METAAUDIT,
+        DEFAULT_PAIRWISE70 as _DEFAULT_PAIRWISE70,
+        DEFAULT_REPRO_FLOOR as _DEFAULT_REPRO_FLOOR,
+    )
+except ImportError:
+    _DEFAULT_PAIRWISE70 = _DEFAULT_METAAUDIT = _DEFAULT_REPRO_FLOOR = None
+
+
+def _resolve(env_var: str, fallback: Path | None) -> Path | None:
+    val = os.environ.get(env_var)
+    if val:
+        return Path(val)
+    return fallback
 
 
 @pytest.fixture(scope="session")
@@ -21,22 +35,24 @@ def repo_root() -> Path:
 
 
 @pytest.fixture(scope="session")
-def pairwise70_dir() -> Path:
-    return Path(os.environ.get("PAIRWISE70_DIR", _DEFAULT_PAIRWISE70))
+def pairwise70_dir() -> Path | None:
+    return _resolve("PAIRWISE70_DIR", _DEFAULT_PAIRWISE70)
 
 
 @pytest.fixture(scope="session")
-def metaaudit_dir() -> Path:
-    return Path(os.environ.get("METAAUDIT_DIR", _DEFAULT_METAAUDIT))
+def metaaudit_dir() -> Path | None:
+    return _resolve("METAAUDIT_DIR", _DEFAULT_METAAUDIT)
 
 
 @pytest.fixture(scope="session")
-def repro_floor_atlas_dir() -> Path:
-    return Path(os.environ.get("REPRO_FLOOR_ATLAS_DIR", _DEFAULT_REPRO_FLOOR))
+def repro_floor_atlas_dir() -> Path | None:
+    return _resolve("REPRO_FLOOR_ATLAS_DIR", _DEFAULT_REPRO_FLOOR)
 
 
 @pytest.fixture(scope="session")
-def atlas_csv(repro_floor_atlas_dir: Path) -> Path:
+def atlas_csv(repro_floor_atlas_dir: Path | None) -> Path | None:
+    if repro_floor_atlas_dir is None:
+        return None
     return repro_floor_atlas_dir / "outputs" / "atlas.csv"
 
 

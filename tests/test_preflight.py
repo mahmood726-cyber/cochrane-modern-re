@@ -59,29 +59,32 @@ def test_jsonlite_loadable() -> None:
     assert result.stdout.strip() == "ok"
 
 
-def test_pairwise70_dir_resolves(pairwise70_dir: Path) -> None:
+def test_pairwise70_dir_resolves(pairwise70_dir: Path | None) -> None:
+    if pairwise70_dir is None:
+        pytest.skip("PAIRWISE70_DIR not set and no paths_local.py — data-dependent test")
     assert pairwise70_dir.is_dir(), (
         f"PAIRWISE70_DIR does not resolve to a directory: {pairwise70_dir}. "
         "Set env var PAIRWISE70_DIR or run scripts/prereq_check.py."
     )
     rda_files = list(pairwise70_dir.glob("*.rda"))
     assert len(rda_files) >= 100, (
-        f"PAIRWISE70_DIR has only {len(rda_files)} .rda files; expected 100+. "
-        "Wrong directory?"
+        f"PAIRWISE70_DIR has only {len(rda_files)} .rda files; expected 100+."
     )
 
 
-def test_metaaudit_dir_resolves(metaaudit_dir: Path) -> None:
-    assert metaaudit_dir.is_dir(), (
-        f"METAAUDIT_DIR does not resolve: {metaaudit_dir}"
-    )
+def test_metaaudit_dir_resolves(metaaudit_dir: Path | None) -> None:
+    if metaaudit_dir is None:
+        pytest.skip("METAAUDIT_DIR not set and no paths_local.py — data-dependent test")
+    assert metaaudit_dir.is_dir(), f"METAAUDIT_DIR does not resolve: {metaaudit_dir}"
     for required in ("__init__.py", "loader.py", "recompute.py"):
         assert (metaaudit_dir / required).exists(), (
             f"METAAUDIT_DIR missing required file: {required}"
         )
 
 
-def test_atlas_csv_present(atlas_csv: Path) -> None:
+def test_atlas_csv_present(atlas_csv: Path | None) -> None:
+    if atlas_csv is None:
+        pytest.skip("REPRO_FLOOR_ATLAS_DIR not set — data-dependent test")
     assert atlas_csv.exists(), (
         f"repro-floor-atlas atlas.csv missing: {atlas_csv}. "
         "Set REPRO_FLOOR_ATLAS_DIR or run repro-floor-atlas scripts/run_atlas.py."
