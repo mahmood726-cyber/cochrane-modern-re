@@ -1,0 +1,19 @@
+rules:
+  - P0-no-hardcoded-local-paths
+  - P0-no-placeholder-hmac
+  - P0-no-claude-config-committed
+  - P1-empty-dataframe-access
+  - P2-stale-agent-config-version
+
+# WARN-only rules that don't block push but surface in sentinel-findings.md
+warn_rules: []
+
+bypass_log: ~/.sentinel-logs/bypass.log
+
+# Exclude venv / renv library artifacts from scanning
+exclude_paths:
+  - renv/library/
+  - renv/staging/
+  - .venv/
+  - outputs/
+  - tests/fixtures/

@@ -1,0 +1,26 @@
+| reproducibility_status   | outcome_type   | k_stratum   |   n_total |   n_comparable |   n_flips |   flip_rate_comparable |   flip_rate_total | sparse_stratum   |
+|:-------------------------|:---------------|:------------|----------:|---------------:|----------:|-----------------------:|------------------:|:-----------------|
+| non_reproducible         | GIV            | 10<=k<20    |         7 |              0 |         0 |                nan     |             0.000 | True             |
+| non_reproducible         | GIV            | 5<=k<10     |         7 |              1 |         0 |                  0.000 |             0.000 | True             |
+| non_reproducible         | GIV            | k<5         |         3 |              0 |         0 |                nan     |             0.000 | True             |
+| non_reproducible         | GIV            | k>=20       |        14 |              0 |         0 |                nan     |             0.000 | True             |
+| non_reproducible         | binary         | 10<=k<20    |        46 |              8 |         0 |                  0.000 |             0.000 | False            |
+| non_reproducible         | binary         | 5<=k<10     |        62 |              8 |         0 |                  0.000 |             0.000 | False            |
+| non_reproducible         | binary         | k<5         |        86 |             15 |         0 |                  0.000 |             0.000 | False            |
+| non_reproducible         | binary         | k>=20       |        58 |              4 |         0 |                  0.000 |             0.000 | False            |
+| non_reproducible         | continuous     | 10<=k<20    |        72 |             10 |         0 |                  0.000 |             0.000 | False            |
+| non_reproducible         | continuous     | 5<=k<10     |       110 |              6 |         1 |                  0.167 |             0.009 | False            |
+| non_reproducible         | continuous     | k<5         |       163 |              5 |         0 |                  0.000 |             0.000 | False            |
+| non_reproducible         | continuous     | k>=20       |        52 |              4 |         0 |                  0.000 |             0.000 | False            |
+| reproducible             | GIV            | 10<=k<20    |        16 |              0 |         0 |                nan     |             0.000 | True             |
+| reproducible             | GIV            | 5<=k<10     |        20 |              0 |         0 |                nan     |             0.000 | False            |
+| reproducible             | GIV            | k<5         |        27 |              0 |         0 |                nan     |             0.000 | False            |
+| reproducible             | GIV            | k>=20       |         7 |              0 |         0 |                nan     |             0.000 | True             |
+| reproducible             | binary         | 10<=k<20    |      1144 |              0 |         0 |                nan     |             0.000 | False            |
+| reproducible             | binary         | 5<=k<10     |      1380 |              0 |         0 |                nan     |             0.000 | False            |
+| reproducible             | binary         | k<5         |      1833 |              0 |         0 |                nan     |             0.000 | False            |
+| reproducible             | binary         | k>=20       |      1060 |              0 |         0 |                nan     |             0.000 | False            |
+| reproducible             | continuous     | 10<=k<20    |        38 |              0 |         0 |                nan     |             0.000 | False            |
+| reproducible             | continuous     | 5<=k<10     |        63 |              0 |         0 |                nan     |             0.000 | False            |
+| reproducible             | continuous     | k<5         |       103 |              0 |         0 |                nan     |             0.000 | False            |
+| reproducible             | continuous     | k>=20       |        15 |              0 |         0 |                nan     |             0.000 | True             |
