@@ -1,0 +1,89 @@
+# Minimal Important Differences (MIDs) for Tier 3 flip classification.
+#
+# Each entry: {mid: <number>, scale: "natural" | "sd_units", source: <citation>}
+#
+# Coverage at v0.1 is intentionally narrow (~15 outcomes). Outcomes not present
+# here produce tier3_mid_flip = NA (paper reports on MID-available subset).
+# Values are scale-sensitive: natural-scale for ratio outcomes (Δ in RR), direct
+# comparison for continuous outcomes. See spec §4.3.
+#
+# TODO for Mahmood at plan kickoff: review each MID against primary literature
+# and trim/extend. These are defensible starting defaults, not final.
+
+all_cause_mortality:
+  mid: 0.05
+  scale: natural
+  source: "Conservative RR-Δ threshold; aligns with GRADE moderate-magnitude guidance."
+
+cv_mortality:
+  mid: 0.05
+  scale: natural
+  source: "Same family as all-cause mortality."
+
+mace:
+  mid: 0.05
+  scale: natural
+  source: "Consensus threshold for composite CV outcomes."
+
+myocardial_infarction:
+  mid: 0.05
+  scale: natural
+  source: "Conservative default; aligns with composite-CV family."
+
+stroke:
+  mid: 0.05
+  scale: natural
+  source: "Conservative default; aligns with composite-CV family."
+
+hf_hospitalisation:
+  mid: 0.05
+  scale: natural
+  source: "GRADE-aligned minimal important RR difference for HF outcome."
+
+all_cause_hospitalisation:
+  mid: 0.05
+  scale: natural
+  source: "Same family as hf_hospitalisation."
+
+# Continuous / SMD — scale='sd_units' means the comparison is direct on the
+# analysis scale (no back-transform).
+
+smd_default_fallback:
+  mid: 0.2
+  scale: sd_units
+  source: "Cohen 1988 — small effect. Fallback for SMD outcomes with no published MCID."
+
+sf36_pcs:
+  mid: 2.5
+  scale: natural
+  source: "Published MCID for SF-36 Physical Component Summary."
+
+sf36_mcs:
+  mid: 3.0
+  scale: natural
+  source: "Published MCID for SF-36 Mental Component Summary."
+
+kccq_overall_summary:
+  mid: 5.0
+  scale: natural
+  source: "Spertus 2015 — KCCQ MCID for HF."
+
+six_minute_walk_distance_m:
+  mid: 30.0
+  scale: natural
+  source: "Redelmeier 1997; validated in HF subsequently."
+
+ldl_c_mg_dl:
+  mid: 10.0
+  scale: natural
+  source: "ACC/AHA consensus MCID for LDL-C reduction."
+
+systolic_bp_mmhg:
+  mid: 5.0
+  scale: natural
+  source: "Hypertension-trial consensus MID."
+
+hba1c_percent:
+  mid: 0.3
+  scale: natural
+  source: "ADA guideline-aligned MID for glycaemic control."
