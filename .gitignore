@@ -16,8 +16,7 @@ sentinel-findings.jsonl
 STUCK_FAILURES.md
 STUCK_FAILURES.jsonl
 data/pairwise70_cache/
-docs/index.html
-docs/non_reproducible_index.html
+# docs/*.html ARE committed — they are the published GitHub Pages artifact.
 docs/smoke_index.html
 renv/
 src/paths_local.py

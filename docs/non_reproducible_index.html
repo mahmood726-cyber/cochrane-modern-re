@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cochrane Modern RE — Flip Atlas v0.1.0-nr</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Cochrane Modern RE — Flip Atlas">
+<meta property="og:description" content="Modern random-effects methods vs RevMan defaults across 6386 Cochrane pairwise meta-analyses.">
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+         max-width: 1100px; margin: 2em auto; padding: 0 1em; color: #222;
+         line-height: 1.5; }
+  h1 { border-bottom: 2px solid #333; padding-bottom: .3em; }
+  h2 { margin-top: 1.8em; border-bottom: 1px solid #ddd; padding-bottom: .2em; }
+  table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.92em; }
+  th, td { border: 1px solid #ccc; padding: 4px 8px; text-align: right; }
+  th { background: #eee; }
+  td:first-child, td:nth-child(2), td:nth-child(3),
+  th:first-child, th:nth-child(2), th:nth-child(3) { text-align: left; }
+  .summary { background: #f6f6f6; padding: 1em 1.2em; border-left: 4px solid #0066cc;
+             margin: 1em 0; }
+  .summary p { margin: .4em 0; }
+  .headline { font-size: 1.4em; font-weight: bold; color: #0066cc; }
+  .sparse td { color: #888; font-style: italic; }
+  footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid #ddd;
+           color: #666; font-size: 0.9em; }
+  code { background: #f6f6f6; padding: 1px 4px; border-radius: 3px;
+         font-family: Consolas, Monaco, monospace; }
+</style>
+</head>
+<body>
+<h1>Cochrane Modern RE — Flip Atlas <small>v0.1.0-nr</small></h1>
+
+<div class="summary">
+  <p><strong>Corpus:</strong> 6386 pairwise meta-analyses across 582 Cochrane systematic reviews (Pairwise70).</p>
+  <p><strong>Methods compared:</strong> DL (baseline), REML_only, REML+HKSJ+PI, <code>bayesmeta</code> half-normal.</p>
+  <p><strong>Headline significance-flip rate (DL → REML+HKSJ+PI):</strong>
+     <span class="headline">15.7%</span>
+     <small>(DL baseline vs REML+HKSJ+PI modern RE)</small>
+  </p>
+</div>
+
+<h2>Tier 1 — Significance flips by stratum</h2>
+<p><em>CI excludes null under baseline but includes null under comparator (or vice versa).</em></p>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>reproducibility status</th>
+      <th>outcome type</th>
+      <th>k stratum</th>
+      <th>n total</th>
+      <th>n comparable</th>
+      <th>n flips</th>
+      <th>flip rate comparable</th>
+      <th>flip rate total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>7</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>7</td>
+      <td>7</td>
+      <td>1</td>
+      <td>0.143</td>
+      <td>0.143</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>k&lt;5</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>k&gt;=20</td>
+      <td>14</td>
+      <td>14</td>
+      <td>1</td>
+      <td>0.071</td>
+      <td>0.071</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>46</td>
+      <td>43</td>
+      <td>3</td>
+      <td>0.070</td>
+      <td>0.065</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>62</td>
+      <td>61</td>
+      <td>8</td>
+      <td>0.131</td>
+      <td>0.129</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>k&lt;5</td>
+      <td>86</td>
+      <td>86</td>
+      <td>15</td>
+      <td>0.174</td>
+      <td>0.174</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>k&gt;=20</td>
+      <td>58</td>
+      <td>57</td>
+      <td>1</td>
+      <td>0.018</td>
+      <td>0.017</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>72</td>
+      <td>72</td>
+      <td>12</td>
+      <td>0.167</td>
+      <td>0.167</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>110</td>
+      <td>110</td>
+      <td>24</td>
+      <td>0.218</td>
+      <td>0.218</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>k&lt;5</td>
+      <td>163</td>
+      <td>163</td>
+      <td>38</td>
+      <td>0.233</td>
+      <td>0.233</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>k&gt;=20</td>
+      <td>52</td>
+      <td>52</td>
+      <td>3</td>
+      <td>0.058</td>
+      <td>0.058</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>16</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>20</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>k&lt;5</td>
+      <td>27</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>k&gt;=20</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>1144</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>1380</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>k&lt;5</td>
+      <td>1833</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>k&gt;=20</td>
+      <td>1060</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>38</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>63</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>k&lt;5</td>
+      <td>103</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>k&gt;=20</td>
+      <td>15</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Tier 2 — Direction flips by stratum</h2>
+<p><em>Sign of pooled point estimate changes (protective → harmful or vice versa).</em></p>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>reproducibility status</th>
+      <th>outcome type</th>
+      <th>k stratum</th>
+      <th>n total</th>
+      <th>n comparable</th>
+      <th>n flips</th>
+      <th>flip rate comparable</th>
+      <th>flip rate total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>7</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>7</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>k&lt;5</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>k&gt;=20</td>
+      <td>14</td>
+      <td>14</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>46</td>
+      <td>43</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>62</td>
+      <td>61</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>k&lt;5</td>
+      <td>86</td>
+      <td>86</td>
+      <td>1</td>
+      <td>0.012</td>
+      <td>0.012</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>k&gt;=20</td>
+      <td>58</td>
+      <td>57</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>72</td>
+      <td>72</td>
+      <td>4</td>
+      <td>0.056</td>
+      <td>0.056</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>110</td>
+      <td>110</td>
+      <td>1</td>
+      <td>0.009</td>
+      <td>0.009</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>k&lt;5</td>
+      <td>163</td>
+      <td>163</td>
+      <td>1</td>
+      <td>0.006</td>
+      <td>0.006</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>k&gt;=20</td>
+      <td>52</td>
+      <td>52</td>
+      <td>2</td>
+      <td>0.038</td>
+      <td>0.038</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>16</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>20</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>k&lt;5</td>
+      <td>27</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>k&gt;=20</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>1144</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>1380</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>k&lt;5</td>
+      <td>1833</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>k&gt;=20</td>
+      <td>1060</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>38</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>63</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>k&lt;5</td>
+      <td>103</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>k&gt;=20</td>
+      <td>15</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Tier 3 — Clinically-important flips (MID-available subset)</h2>
+<p><em>|Δ pooled effect| exceeds the MID for that outcome. Reported only on the MID-available subset; NA for outcomes not in the MID lookup table.</em></p>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>reproducibility status</th>
+      <th>outcome type</th>
+      <th>k stratum</th>
+      <th>n total</th>
+      <th>n comparable</th>
+      <th>n flips</th>
+      <th>flip rate comparable</th>
+      <th>flip rate total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>7</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>k&lt;5</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>GIV</td>
+      <td>k&gt;=20</td>
+      <td>14</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>46</td>
+      <td>8</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>62</td>
+      <td>8</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>k&lt;5</td>
+      <td>86</td>
+      <td>15</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>binary</td>
+      <td>k&gt;=20</td>
+      <td>58</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>72</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>110</td>
+      <td>6</td>
+      <td>1</td>
+      <td>0.167</td>
+      <td>0.009</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>k&lt;5</td>
+      <td>163</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>non_reproducible</td>
+      <td>continuous</td>
+      <td>k&gt;=20</td>
+      <td>52</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>16</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>20</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>k&lt;5</td>
+      <td>27</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>GIV</td>
+      <td>k&gt;=20</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>1144</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>1380</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>k&lt;5</td>
+      <td>1833</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>binary</td>
+      <td>k&gt;=20</td>
+      <td>1060</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>10&lt;=k&lt;20</td>
+      <td>38</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>5&lt;=k&lt;10</td>
+      <td>63</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>k&lt;5</td>
+      <td>103</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>reproducible</td>
+      <td>continuous</td>
+      <td>k&gt;=20</td>
+      <td>15</td>
+      <td>0</td>
+      <td>0</td>
+      <td>—</td>
+      <td>0.000</td>
+    </tr>
+  </tbody>
+</table>
+
+<footer>
+  <p>Generated 2026-04-21T16:57+00:00 UTC. Source: <a href="https://github.com/mahmood726-cyber/cochrane-modern-re">cochrane-modern-re</a>. Target journal: Research Synthesis Methods.</p>
+  <p>Related: <a href="https://github.com/mahmood726-cyber/repro-floor-atlas">repro-floor-atlas</a> (reproduction-floor primitive).</p>
+</footer>
+</body>
+</html>
