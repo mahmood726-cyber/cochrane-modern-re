@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+title: "cochrane-modern-re"
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+authors:
+  - family-names: Ahmad
+    given-names: Mahmood
+    email: mahmood726@gmail.com
+repository-code: "https://github.com/mahmood726-cyber/cochrane-modern-re"
+url: "https://mahmood726-cyber.github.io/cochrane-modern-re/"
+abstract: >-
+  Reference implementation and demonstrator paper: four random-effects
+  methods (DerSimonian-Laird, REML-only, REML+HKSJ+PI, bayesmeta
+  half-normal) applied to the 7,545 pairwise Cochrane meta-analyses in
+  the Pairwise70 corpus. Quantifies how often switching from RevMan's
+  default RE method changes the statistical significance, direction, or
+  clinical-importance judgement of the pooled effect.
+keywords:
+  - meta-analysis
+  - Cochrane
+  - random-effects
+  - REML
+  - HKSJ
+  - Bayesian
+  - reproducibility
+  - systematic review
+license: MIT
+version: 0.1.0
+date-released: "2026-04-21"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Ahmad
+      given-names: Mahmood
+  title: >-
+    Modern random-effects methods change the significance judgement of
+    Cochrane pairwise meta-analyses in 8.2% of cases
+  year: 2026
+  journal: "Research Synthesis Methods"
+  notes: "In preparation."
