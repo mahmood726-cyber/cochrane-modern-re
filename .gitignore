@@ -18,7 +18,14 @@ STUCK_FAILURES.jsonl
 data/pairwise70_cache/
 # docs/*.html ARE committed — they are the published GitHub Pages artifact.
 docs/smoke_index.html
-renv/
+# renv: keep activate.R + settings.json + .gitignore; exclude actual libraries
+renv/library/
+renv/local/
+renv/cellar/
+renv/lock/
+renv/python/
+renv/sandbox/
+renv/staging/
 src/paths_local.py
 .env.local
 # === Sentinel hook output (auto-added by install) ===
