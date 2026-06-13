@@ -87,12 +87,21 @@ class LoadResult:
     skip_log: dict[str, str]
 
 
-def load_reproducibility_status(atlas_csv: Path) -> dict[str, ReproStatus]:
+def load_reproducibility_status(atlas_csv: Path | None) -> dict[str, ReproStatus]:
     """Parse atlas.csv and return {ma_id → reproducibility_status}.
 
     We use the `raw_extraction` + `adaptive` row as the canonical verdict
     (matches repro-floor-atlas README §Methods).
+
+    If ``atlas_csv`` is ``None`` (REPRO_FLOOR_ATLAS_DIR not configured) or the
+    file is absent, return an empty mapping so every MA degrades to an
+    'unknown' reproducibility_status rather than crashing the load.
     """
+    if atlas_csv is None:
+        logger.warning(
+            "REPRO_FLOOR_ATLAS_DIR not set; reproducibility_status will be 'unknown'"
+        )
+        return {}
     if not atlas_csv.exists():
         logger.warning("atlas.csv not at %s; reproducibility_status will be 'unknown'", atlas_csv)
         return {}
