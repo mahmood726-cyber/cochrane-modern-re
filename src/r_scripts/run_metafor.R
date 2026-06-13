@@ -7,7 +7,9 @@
 #             k_effective, converged, reason_code}, ...]
 #
 # HKSJ Q/(k-1) floor applied by metafor's test="knha" when rma() is called
-# with that option (see metafor docs §rma `test`). PI at t_{k-2}; NA for k<3.
+# with that option (see metafor docs §rma `test`). Prediction interval comes
+# from metafor's predict.rma, which uses t_{k-1} (Cochrane Handbook v6.5,
+# §10.10.4.3 / RevMan-2025 convention), NOT t_{k-2}. NA for k<3.
 
 suppressMessages({
   library(jsonlite)

@@ -52,7 +52,7 @@ We compared four RE methods for each MA:
 
 1. **DL** — DerSimonian-Laird τ² + Wald 95% CI (*z*-based). The RevMan baseline.
 2. **REML-only** — REML τ² + Wald 95% CI (*z*-based). Isolates the effect of the estimator alone (*ablation*).
-3. **REML+HKSJ+PI** — REML τ² + HKSJ-adjusted 95% CI based on *t*_{k−1}, with a Q/(k−1) floor preventing the HKSJ adjustment from narrowing the CI below the REML+Wald reference when Q/(k−1) < 1 [@advanced_stats_2026]; plus a 95% prediction interval based on *t*_{k−2} for k ≥ 3 [@higgins2009]. Implemented via `metafor::rma(..., test="knha")` with post-hoc floor enforcement. The *headline modern comparator*.
+3. **REML+HKSJ+PI** — REML τ² + HKSJ-adjusted 95% CI based on *t*_{k−1}, with a Q/(k−1) floor preventing the HKSJ adjustment from narrowing the CI below the REML+Wald reference when Q/(k−1) < 1 [@advanced_stats_2026]; plus a 95% prediction interval for k ≥ 3, computed via `metafor::predict.rma`, which uses *t*_{k−1} (Cochrane Handbook v6.5 §10.10.4.3 / RevMan-2025 convention; the IntHout-Higgins-Tudur-Smith 2016 *t*_{k−2} variant is not used) [@higgins2009]. Implemented via `metafor::rma(..., test="knha")` with post-hoc floor enforcement. The *headline modern comparator*.
 4. **bayesmeta_HN** — Bayesian RE via `bayesmeta` [@rover2020] with a half-normal prior on τ (scale = 0.5 for log-scale outcomes, 1.0 for SMD/MD/GIV). Posterior median and central 95% CI; 95% prediction interval via the posterior predictive. `bayesmeta` is grid-based and deterministic. The *Bayesian comparator*.
 
 All four methods were run on every MA for which loading succeeded (N_loaded of 7,545), using batched R subprocess calls via a thin Python façade for JSON IO. R: 4.5.2 with metafor 4.8-0, bayesmeta 3.5.
