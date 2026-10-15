@@ -46,9 +46,11 @@ for (f in fixtures) {
       se <- as.numeric(res$se)
       ci_lo <- as.numeric(res$ci.lb)
       ci_hi <- as.numeric(res$ci.ub)
+      floor_applied <- FALSE
 
       # Apply HKSJ Q/(k-1) floor to match wrapper behaviour exactly.
       if (cfg$name == "REML_HKSJ_PI" && !is.na(wald_se) && se < wald_se && k >= 2) {
+        floor_applied <- TRUE
         se <- wald_se
         t_crit <- qt(0.975, df = k - 1)
         ci_lo <- estimate - t_crit * se
@@ -58,7 +60,16 @@ for (f in fixtures) {
       pi_lo <- NA; pi_hi <- NA
       if (cfg$name == "REML_HKSJ_PI" && k >= 3) {
         pred <- tryCatch(predict(res), error = function(e) NULL)
-        if (!is.null(pred)) { pi_lo <- pred$pi.lb; pi_hi <- pred$pi.ub }
+        if (!is.null(pred)) {
+          if (floor_applied) {
+            halfwidth <- qt(0.975, df = k - 1) * sqrt(se^2 + as.numeric(res$tau2))
+            pi_lo <- estimate - halfwidth
+            pi_hi <- estimate + halfwidth
+          } else {
+            pi_lo <- pred$pi.lb
+            pi_hi <- pred$pi.ub
+          }
+        }
       }
       entry[[cfg$name]] <- list(
         estimate = estimate,
