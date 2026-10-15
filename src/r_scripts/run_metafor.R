@@ -6,10 +6,9 @@
 #   stdout: [{ma_id, estimate, se, ci_lo, ci_hi, tau2, i2, pi_lo, pi_hi,
 #             k_effective, converged, reason_code}, ...]
 #
-# HKSJ Q/(k-1) floor applied by metafor's test="knha" when rma() is called
-# with that option (see metafor docs §rma `test`). Prediction interval comes
-# from metafor's predict.rma, which uses t_{k-1} (Cochrane Handbook v6.5,
-# §10.10.4.3 / RevMan-2025 convention), NOT t_{k-2}. NA for k<3.
+# The HKSJ Q/(k-1) floor is applied EXPLICITLY by this wrapper.
+# metafor::rma(test="knha") may otherwise yield a narrower interval.
+# PI must reflect the same floored pooled variance; NA for k < 3.
 
 suppressMessages({
   library(jsonlite)
@@ -52,6 +51,7 @@ run_one <- function(one) {
   se_final <- as.numeric(res$se)
   ci_lo <- as.numeric(res$ci.lb)
   ci_hi <- as.numeric(res$ci.ub)
+  floor_applied <- FALSE
 
   # HKSJ Q/(k-1) floor (advanced-stats.md):
   # If Q/(k-1) < 1, HKSJ SE can be narrower than the REML+Wald SE. Set the floor
@@ -64,6 +64,7 @@ run_one <- function(one) {
     if (!is.null(wald_ref)) {
       wald_se <- as.numeric(wald_ref$se)
       if (se_final < wald_se) {
+        floor_applied <- TRUE
         se_final <- wald_se
         # HKSJ uses t_{k-1} critical value; preserve that inference shape
         t_crit <- qt(0.975, df = k - 1)
@@ -77,8 +78,18 @@ run_one <- function(one) {
   if (method == "REML_HKSJ_PI" && k >= 3) {
     pred <- tryCatch(predict(res), error = function(e) NULL)
     if (!is.null(pred)) {
-      pi_lo <- as.numeric(pred$pi.lb)
-      pi_hi <- as.numeric(pred$pi.ub)
+      if (floor_applied) {
+        # predict(res) uses the UNFLOORED HKSJ variance. For this
+        # intercept-only random-effects model, use the same floored
+        # pooled SE in the prediction interval to maintain coherence.
+        t_crit <- qt(0.975, df = k - 1)
+        pi_halfwidth <- t_crit * sqrt(se_final^2 + as.numeric(res$tau2))
+        pi_lo <- estimate - pi_halfwidth
+        pi_hi <- estimate + pi_halfwidth
+      } else {
+        pi_lo <- as.numeric(pred$pi.lb)
+        pi_hi <- as.numeric(pred$pi.ub)
+      }
     }
   }
 
