@@ -82,6 +82,17 @@ docker run --rm -v $(pwd):/work cochrane-modern-re python -m pytest
 
 `metafor::rma(..., test="knha")` applies the Hartung-Knapp-Sidik-Jonkman adjustment directly without the [IntHout et al. 2014](https://doi.org/10.1186/1471-2288-14-25) Q/(k−1) floor. Without the floor, HKSJ can spuriously *narrow* the CI below the REML+Wald reference when studies are near-homogeneous. We enforce the floor in `src/r_scripts/run_metafor.R` by comparing the HKSJ SE against the REML+Wald SE and taking the larger, then reconstructing the CI with the *t*_{k−1} critical value.
 
+### Prediction-interval coherence and Bayesian diagnostics
+
+The explicitly floored HKSJ pooled standard error is now propagated into
+the prediction interval. In particular, when estimated heterogeneity is zero
+the prediction interval matches the adjusted confidence interval, rather
+than being spuriously narrower.
+
+`bayesmeta` uses deterministic numerical integration, not MCMC, so `rhat`
+and `ess` are null (not applicable). Older downstream outputs using
+prediction intervals or these diagnostics must be regenerated.
+
 ### Tier 3 — scale-aware MID flip
 
 For ratio outcomes (logRR/logOR/logHR) the MID comparison is on the natural scale after back-transform: `|exp(est_baseline) − exp(est_comparator)| > MID`. For continuous outcomes (SMD/MD/GIV) the comparison is direct. MID values in `data/mid_lookup.yaml` specify `{mid, scale, source}`.
