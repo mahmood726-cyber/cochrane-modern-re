@@ -62,6 +62,27 @@ def test_pi_populated_for_k_ge_3(expected: dict) -> None:
         assert result.pi_hi == pytest.approx(fx["pi_hi"], abs=1e-6)
 
 
+def test_pi_uses_hksj_floor_when_tau2_zero() -> None:
+    """With zero estimated heterogeneity, a floored PI matches the floored CI.
+
+    Previous code used predict(res) on the unfloored fit, producing a
+    narrower prediction interval despite tau² = 0.
+    """
+    for name, yi, vi in (
+        ("binary_k3_moderate_het", [-0.30, 0.10, -0.20], [0.05, 0.07, 0.06]),
+        ("continuous_k10_mixed",
+         [0.20, 0.25, -0.10, 0.15, 0.40, 0.05, 0.50, -0.05, 0.30, 0.00],
+         [0.05] * 10),
+    ):
+        ma = _build_ma(name, yi, vi)
+        result = run_batch(method="REML_HKSJ_PI", effect_scale="logOR",
+                           mas=[ma])[0]
+        assert result.converged
+        assert result.tau2 == pytest.approx(0, abs=1e-12)
+        assert result.pi_lo == pytest.approx(result.ci_lo, abs=1e-9)
+        assert result.pi_hi == pytest.approx(result.ci_hi, abs=1e-9)
+
+
 def test_pi_na_for_k_2() -> None:
     """Task 3.4 boundary: PI uses t_{k-2}; undefined for k<3."""
     ma = _build_ma("k2_boundary", [-0.10, 0.20], [0.02, 0.025])
@@ -101,7 +122,7 @@ def test_hksj_floor_prevents_narrowing_below_dl() -> None:
 
     The fixture `hksj_narrow_homogeneous` has near-homogeneous studies with
     low Q; without the floor, HKSJ SE can be smaller than DL SE. With the
-    floor (which metafor's test='knha' applies natively), HKSJ SE ≥ DL SE.
+    explicit wrapper floor, HKSJ SE ≥ the matching REML Wald SE.
     """
     yi = [-0.100, -0.101, -0.099, -0.100, -0.102]
     vi = [0.010] * 5

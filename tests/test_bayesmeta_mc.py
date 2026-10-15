@@ -81,8 +81,8 @@ def test_bayesmeta_batch_of_multiple_mas() -> None:
     for r in results:
         assert r.converged
         assert r.method == "bayesmeta_HN"
-        assert r.rhat == pytest.approx(1.0)
-        assert r.ess >= 200
+        assert r.rhat is None  # no MCMC chains
+        assert r.ess is None   # no MCMC draws
 
 
 def test_bayesmeta_reports_tau2() -> None:

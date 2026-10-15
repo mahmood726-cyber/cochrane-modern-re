@@ -160,7 +160,7 @@ def test_no_duplicate_ma_ids_in_corpus() -> None:
     assert len(ids) == len(set(ids)), "duplicate ma_ids in loaded corpus"
 
 
-def test_duplicate_ma_id_hard_fails(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_duplicate_ma_id_hard_fails(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """Mock the metaaudit loader to return two analyses with the same ma_id;
     verify LoaderError('dataset_integrity_error') is raised.
 
@@ -195,4 +195,11 @@ def test_duplicate_ma_id_hard_fails(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(ml, "load_all_reviews", _fake_load_all_reviews)
 
     with pytest.raises(LoaderError, match="dataset_integrity_error"):
-        iter_mas_with_log(max_reviews=1)
+        iter_mas_with_log(
+            max_reviews=1,
+            # The mocked loader needs no actual Pairwise70 files, so give
+            # it a disposable path rather than requiring local config.
+            pairwise70_dir=tmp_path,
+            metaaudit_dir=Path(ml.__file__).resolve().parent,
+            atlas_csv=tmp_path / "not_provisioned_atlas.csv",
+        )

@@ -6,8 +6,8 @@
 #   stdout: [{ma_id, estimate, se, ci_lo, ci_hi, tau2, i2, pi_lo, pi_hi,
 #             k_effective, converged, rhat, ess, reason_code}, ...]
 #
-# bayesmeta is deterministic (grid-based, not MCMC), so rhat/ess are
-# reported as stable-by-construction proxies: rhat=1.0, ess=k*100.
+# bayesmeta uses deterministic numerical integration, not MCMC.
+# R-hat and MCMC ESS are undefined here: report null, never proxies.
 
 suppressMessages({
   library(jsonlite)
@@ -68,8 +68,8 @@ run_one <- function(one) {
     pi_hi = theta_hi,
     k_effective = k,
     converged = TRUE,
-    rhat = 1.0,         # bayesmeta is grid-deterministic
-    ess = as.numeric(k * 100),
+    rhat = NA_real_,    # not applicable: no MCMC chains
+    ess = NA_real_,     # not applicable: no MCMC draws
     reason_code = ""
   )
 }

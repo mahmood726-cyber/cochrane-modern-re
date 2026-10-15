@@ -58,8 +58,24 @@ jobs:
       - name: Install Python package
         run: pip install -e ".[dev]"
 
-      - name: Slow tier — Bayesian MC + method correctness + loader integration
+      # The loader's unit tests execute MetaAudit's real effect computations,
+      # even on synthetic inputs. Keep this external implementation pinned:
+      # otherwise slow CI fails with ModuleNotFoundError and misses coverage.
+      - name: Checkout pinned MetaAudit loader dependency
+        uses: actions/checkout@v4
+        with:
+          repository: mahmood726-cyber/MetaAudit
+          ref: 7ebdc18811e10ac69349605212a37d140a08a326
+          path: external/MetaAudit
+          persist-credentials: false
+
+      - name: Install MetaAudit loader dependencies
+        run: python -m pip install "pyreadr>=0.5.0" "scipy>=1.10.0"
+
+      - name: Slow tier — Bayesian MC + method correctness + loader unit tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}/external/MetaAudit
         run: python -m pytest -v tests/test_methods.py tests/test_bayesmeta_mc.py tests/test_loaders.py
 
-      # Note: tests/test_integration.py skipped in CI — requires Pairwise70
-      # corpus + MetaAudit which aren't public. Kept as a local/dev gate only.
+      # The separate end-to-end test_integration.py still needs an actual
+      # Pairwise70 .rda corpus; no user data is provisioned in public CI.
